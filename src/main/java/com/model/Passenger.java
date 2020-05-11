@@ -1,5 +1,8 @@
 package com.model;
 
+import com.fasterxml.jackson.annotation.*;
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
@@ -9,11 +12,18 @@ import java.util.Set;
 @Entity
 @Table(name = "PASSENGER")
 public class Passenger {
+    @JsonProperty("id")
     private Long id;
+    @JsonProperty("lastName")
     private String lastName;
+    @JsonProperty("nationality")
     private String nationality;
+    @JsonFormat(pattern="yyyy-MM-dd")
+    @JsonProperty("dateOfBirth")
     private Date dateOfBirth;
+    @JsonProperty("passportCode")
     private String passportCode;
+    @JsonProperty("flights")
     private Set<Flight> flights = new HashSet<>();
 
     public Passenger() {
@@ -37,7 +47,7 @@ public class Passenger {
     }
 
     @Id
-    @SequenceGenerator(name = "PASS_SEQ", sequenceName = "PASSENGER_SEQ")
+    @SequenceGenerator(name = "PASS_SEQ", sequenceName = "PASSENGER_SEQ", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PASS_SEQ")
     @Column(name = "ID")
     public Long getId() {
@@ -85,31 +95,13 @@ public class Passenger {
     }
 
 
-    @ManyToMany(mappedBy = "passengers")
+    @ManyToMany(mappedBy = "passengers", fetch = FetchType.LAZY)
     public Set<Flight> getFlights() {
         return flights;
     }
 
     public void setFlights(Set<Flight> flights) {
         this.flights = flights;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Passenger)) return false;
-        Passenger passenger = (Passenger) o;
-        return Objects.equals(id, passenger.id) &&
-                Objects.equals(lastName, passenger.lastName) &&
-                Objects.equals(nationality, passenger.nationality) &&
-                Objects.equals(dateOfBirth, passenger.dateOfBirth) &&
-                Objects.equals(passportCode, passenger.passportCode) &&
-                Objects.equals(flights, passenger.flights);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, lastName, nationality, dateOfBirth, passportCode, flights);
     }
 
     @Override

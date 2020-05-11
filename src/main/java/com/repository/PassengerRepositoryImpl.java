@@ -2,19 +2,17 @@ package com.repository;
 
 import com.model.Passenger;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import java.util.Set;
 
 @Repository
-@Transactional
 public class PassengerRepositoryImpl implements PassengerRepository {
     @PersistenceContext
     private EntityManager entityManager;
-    private static final String sqlQueryFindById = "from Passenger where id =:code";
 
     @Override
     public Passenger save(Passenger passenger) {
@@ -37,9 +35,7 @@ public class PassengerRepositoryImpl implements PassengerRepository {
 
     @Override
     public Passenger findById(Long id) {
-        Query query = entityManager.createQuery(sqlQueryFindById);
-        query.setParameter("code", id);
-        return (Passenger) query.getSingleResult();
+        return entityManager.find(Passenger.class, id);
     }
 
     @Override

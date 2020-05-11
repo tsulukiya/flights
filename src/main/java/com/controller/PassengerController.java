@@ -2,25 +2,25 @@ package com.controller;
 
 import com.model.Passenger;
 import com.service.PassengerService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class PassengerController {
-    @Autowired
-    private PassengerService passengerService;
+    private final PassengerService passengerService;
+
+    public PassengerController(PassengerService passengerService) {
+        this.passengerService = passengerService;
+    }
 
     @RequestMapping(method = RequestMethod.POST, value = "savePassenger", produces = "application/json")
     public @ResponseBody
-    Passenger save(Passenger passenger) {
+    Passenger save(@RequestBody Passenger passenger) {
         return passengerService.save(passenger);
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "updatePassenger", produces = "application/json")
-    public @ResponseBody Passenger update(Passenger passenger) {
+    public @ResponseBody Passenger update(@RequestBody Passenger passenger) {
         return passengerService.update(passenger);
     }
 

@@ -21,14 +21,14 @@ import java.util.Properties;
 @Configuration
 @EnableTransactionManagement
 @EnableWebMvc
-@ComponentScan(basePackages = "java")
+@ComponentScan(basePackages = "com")
 public class AppConfig {
 
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource());
-        em.setPackagesToScan(new String[]{"java"});
+        em.setPackagesToScan(new String[]{"com"});
         JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         em.setJpaVendorAdapter(vendorAdapter);
         em.setJpaProperties(additionalProperties());
@@ -45,10 +45,10 @@ public class AppConfig {
         return dataSource;
     }
 
-//    @Bean
-//    public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
-//        return new PersistenceExceptionTranslationPostProcessor();
-//    }
+    @Bean
+    public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
+        return new PersistenceExceptionTranslationPostProcessor();
+    }
 
     @Bean
     public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
@@ -79,8 +79,9 @@ public class AppConfig {
     }
 
     @Bean(name = "flightService")
-    public FlightService flightService(FlightRepository flightRepository) {
-        return new FlightServiceImpl(flightRepository);
+    public FlightService flightService(FlightRepository flightRepository, PlaneService planeService,
+                                       PassengerService passengerService) {
+        return new FlightServiceImpl(flightRepository, planeService, passengerService);
     }
 
     @Bean(name = "passengerRepository")
@@ -89,7 +90,8 @@ public class AppConfig {
     }
 
     @Bean(name = "passengerService")
-    public PassengerService passengerService(PassengerRepository passengerRepository) {
-        return new PassengerServiceImpl(passengerRepository);
+    public PassengerService passengerService(PassengerRepository passengerRepository,
+                                             FlightRepository flightRepository) {
+        return new PassengerServiceImpl(passengerRepository, flightRepository);
     }
 }

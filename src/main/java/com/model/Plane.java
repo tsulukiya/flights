@@ -1,11 +1,12 @@
 package com.model;
 
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.springframework.context.annotation.Bean;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.sql.Date;
 import java.util.Objects;
 
 @Entity
@@ -17,12 +18,17 @@ public class Plane {
     private String model;
     @JsonProperty("code")
     private String code;
+    @JsonFormat(pattern="yyyy-MM-dd")
     @JsonProperty("yearProduced")
     private Date yearProduced;
     @JsonProperty("avgFuelConsumption")
     private Double avgFuelConsumption;
 
     public Plane() {
+    }
+
+    public Plane(Long id) {
+        this.id = id;
     }
 
     public Plane(String model, String code, Date yearProduced, Double avgFuelConsumption) {
@@ -48,7 +54,7 @@ public class Plane {
     }
 
     @Id
-    @SequenceGenerator(name = "PL_SEQ", sequenceName = "PLANE_SEQ")
+    @SequenceGenerator(name = "PL_SEQ", sequenceName = "PLANE_SEQ", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PL_SEQ")
     @Column(name = "ID")
     public Long getId() {
@@ -93,23 +99,6 @@ public class Plane {
 
     public void setAvgFuelConsumption(Double avgFuelConsumption) {
         this.avgFuelConsumption = avgFuelConsumption;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Plane)) return false;
-        Plane plane = (Plane) o;
-        return Objects.equals(id, plane.id) &&
-                Objects.equals(model, plane.model) &&
-                Objects.equals(code, plane.code) &&
-                Objects.equals(yearProduced, plane.yearProduced) &&
-                Objects.equals(avgFuelConsumption, plane.avgFuelConsumption);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, model, code, yearProduced, avgFuelConsumption);
     }
 
     @Override

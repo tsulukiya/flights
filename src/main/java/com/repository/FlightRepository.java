@@ -1,6 +1,6 @@
 package com.repository;
 
-import com.model.Filter;
+import com.service.filtering.Filter;
 import com.model.Flight;
 
 import java.util.List;

@@ -1,5 +1,11 @@
 package com.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
@@ -9,15 +15,23 @@ import java.util.Set;
 @Entity
 @Table(name = "FLIGHT")
 public class Flight {
+    @JsonProperty("id")
     private Long id;
+    @JsonProperty("plane")
     private Plane plane;
+    @JsonProperty("passengers")
     private Set<Passenger> passengers = new HashSet<>();
+    @JsonFormat(pattern="yyyy-MM-dd")
+    @JsonProperty("dateFlight")
     private Date dateFlight;
+    @JsonProperty("cityFrom")
     private String cityFrom;
+    @JsonProperty("cityTo")
     private String cityTo;
 
     public Flight() {
     }
+
 
     public Flight(Plane plane, Set<Passenger> passengers, Date dateFlight, String cityFrom, String cityTo) {
         this.plane = plane;
@@ -36,8 +50,23 @@ public class Flight {
         this.cityTo = cityTo;
     }
 
+    public Flight(Long id) {
+        this.id = id;
+    }
+
+    public Flight(Plane plane, String cityFrom, String cityTo) {
+        this.plane = plane;
+        this.cityFrom = cityFrom;
+        this.cityTo = cityTo;
+    }
+
+    public Flight(String cityFrom, String cityTo) {
+        this.cityFrom = cityFrom;
+        this.cityTo = cityTo;
+    }
+
     @Id
-    @SequenceGenerator(name = "FL_SEQ", sequenceName = "FLIGHT_SEQ")
+    @SequenceGenerator(name = "FL_SEQ", sequenceName = "FLIGHT_SEQ", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "FL_SEQ")
     @Column(name = "ID")
     public Long getId() {
@@ -49,7 +78,7 @@ public class Flight {
     }
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "PLANE_FK")
+    @JoinColumn(name = "PLANE")
     public Plane getPlane() {
         return plane;
     }
@@ -58,9 +87,11 @@ public class Flight {
         this.plane = plane;
     }
 
+    //@JsonManagedReference
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(name = "PASSENGER", joinColumns = {@JoinColumn(referencedColumnName = "ID")},
-            inverseJoinColumns = {@JoinColumn(referencedColumnName = "ID")})
+    @JoinTable(name = "FLIGHT_PASSENGER",
+            joinColumns = {@JoinColumn(name = "FLIGHT_ID")},
+            inverseJoinColumns = {@JoinColumn(name = "PASSENGER_ID")})
     public Set<Passenger> getPassengers() {
         return passengers;
     }
@@ -97,32 +128,14 @@ public class Flight {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Flight)) return false;
-        Flight flight = (Flight) o;
-        return Objects.equals(id, flight.id) &&
-                Objects.equals(plane, flight.plane) &&
-                Objects.equals(passengers, flight.passengers) &&
-                Objects.equals(dateFlight, flight.dateFlight) &&
-                Objects.equals(cityFrom, flight.cityFrom) &&
-                Objects.equals(cityTo, flight.cityTo);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, plane, passengers, dateFlight, cityFrom, cityTo);
-    }
-
-    @Override
     public String toString() {
         return "Flight{" +
                 "id=" + id +
                 ", plane=" + plane +
-                ", passengers=" + passengers +
                 ", dateFlight=" + dateFlight +
                 ", cityFrom='" + cityFrom + '\'' +
                 ", cityTo='" + cityTo + '\'' +
                 '}';
     }
+
 }

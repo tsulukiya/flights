@@ -4,11 +4,15 @@ import com.model.Plane;
 import com.repository.PlaneRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+import java.sql.Date;
+import java.sql.SQLData;
+import java.text.SimpleDateFormat;
 import java.util.Set;
 
 @Service
+@Transactional
 public class PlaneServiceImpl implements PlaneService {
     private PlaneRepository planeRepository;
 
@@ -19,7 +23,7 @@ public class PlaneServiceImpl implements PlaneService {
 
     @Override
     public Plane save(Plane plane) {
-        plane.setYearProduced(new Date());
+        plane.setYearProduced(new Date(1978));
         return planeRepository.save(plane);
     }
 

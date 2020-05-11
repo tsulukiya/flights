@@ -1,6 +1,6 @@
 package com.service;
 
-import com.model.Filter;
+import com.service.filtering.Filter;
 import com.model.Flight;
 
 import java.util.List;
@@ -20,4 +20,6 @@ public interface FlightService {
     List<Flight> mostPopularTo();
 
     List<Flight> mostPopularFrom();
+
+
 }

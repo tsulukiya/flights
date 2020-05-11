@@ -1,22 +1,26 @@
 package com.repository;
 
-import com.model.Filter;
+import com.service.filtering.Filter;
 import com.model.Flight;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.hibernate.annotations.LazyGroup;
+import org.hibernate.annotations.Proxy;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.List;
 
 @Repository
-@Transactional
 public class FlightRepositoryImpl implements FlightRepository {
     @PersistenceContext
     private EntityManager entityManager;
-    private static final String sqlQueryFindById = "from Flight where id =:code";
+
+
     @Override
     public Flight save(Flight flight) {
         entityManager.persist(flight);
@@ -25,7 +29,7 @@ public class FlightRepositoryImpl implements FlightRepository {
 
     @Override
     public Flight update(Flight flight) {
-        entityManager.merge(flight);
+        entityManager.persist(flight);
         return flight;
     }
 
@@ -38,15 +42,17 @@ public class FlightRepositoryImpl implements FlightRepository {
 
     @Override
     public Flight findById(Long id) {
-        Query query = entityManager.createQuery(sqlQueryFindById);
-        query.setParameter("code", id);
-        Flight flight = (Flight) query.getSingleResult();
-        return flight;
+        return entityManager.find(Flight.class, id);
     }
 
     @Override
     public List<Flight> flightsByDate(Filter filter) {
-        return null;
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Flight> q = cb.createQuery(Flight.class);
+        Root<Flight> root = q.from(Flight.class);
+        q.select(root);
+        q.where(cb.between(root.get(filter.getFilteredField()), filter.getStartDate(), filter.getEndDate()));
+        return entityManager.createQuery(q).getResultList();
     }
 
     @Override
