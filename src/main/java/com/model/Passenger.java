@@ -29,23 +29,6 @@ public class Passenger {
     public Passenger() {
     }
 
-    public Passenger(String lastName, String nationality, Date dateOfBirth, String passportCode, Set<Flight> flights) {
-        this.lastName = lastName;
-        this.nationality = nationality;
-        this.dateOfBirth = dateOfBirth;
-        this.passportCode = passportCode;
-        this.flights = flights;
-    }
-
-    public Passenger(Long id, String lastName, String nationality, Date dateOfBirth, String passportCode, Set<Flight> flights) {
-        this.id = id;
-        this.lastName = lastName;
-        this.nationality = nationality;
-        this.dateOfBirth = dateOfBirth;
-        this.passportCode = passportCode;
-        this.flights = flights;
-    }
-
     @Id
     @SequenceGenerator(name = "PASS_SEQ", sequenceName = "PASSENGER_SEQ", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PASS_SEQ")

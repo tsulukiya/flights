@@ -41,30 +41,6 @@ public class Flight {
         this.cityTo = cityTo;
     }
 
-    public Flight(Long id, Plane plane, Set<Passenger> passengers, Date dateFlight, String cityFrom, String cityTo) {
-        this.id = id;
-        this.plane = plane;
-        this.passengers = passengers;
-        this.dateFlight = dateFlight;
-        this.cityFrom = cityFrom;
-        this.cityTo = cityTo;
-    }
-
-    public Flight(Long id) {
-        this.id = id;
-    }
-
-    public Flight(Plane plane, String cityFrom, String cityTo) {
-        this.plane = plane;
-        this.cityFrom = cityFrom;
-        this.cityTo = cityTo;
-    }
-
-    public Flight(String cityFrom, String cityTo) {
-        this.cityFrom = cityFrom;
-        this.cityTo = cityTo;
-    }
-
     @Id
     @SequenceGenerator(name = "FL_SEQ", sequenceName = "FLIGHT_SEQ", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "FL_SEQ")

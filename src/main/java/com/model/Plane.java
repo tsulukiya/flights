@@ -27,32 +27,6 @@ public class Plane {
     public Plane() {
     }
 
-    public Plane(Long id) {
-        this.id = id;
-    }
-
-    public Plane(String model, String code, Date yearProduced, Double avgFuelConsumption) {
-        this.model = model;
-        this.code = code;
-        this.yearProduced = yearProduced;
-        this.avgFuelConsumption = avgFuelConsumption;
-    }
-
-    public Plane(Long id, String model, String code, Date yearProduced, Double avgFuelConsumption) {
-        this.id = id;
-        this.model = model;
-        this.code = code;
-        this.yearProduced = yearProduced;
-        this.avgFuelConsumption = avgFuelConsumption;
-    }
-
-    public Plane(Long id, String model, String code, Double avgFuelConsumption) {
-        this.id = id;
-        this.model = model;
-        this.code = code;
-        this.avgFuelConsumption = avgFuelConsumption;
-    }
-
     @Id
     @SequenceGenerator(name = "PL_SEQ", sequenceName = "PLANE_SEQ", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PL_SEQ")
