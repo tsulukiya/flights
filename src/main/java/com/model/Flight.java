@@ -15,36 +15,18 @@ import java.util.Set;
 @Entity
 @Table(name = "FLIGHT")
 public class Flight {
-    @JsonProperty("id")
+
     private Long id;
-    @JsonProperty("plane")
     private Plane plane;
-    @JsonProperty("passengers")
     private Set<Passenger> passengers = new HashSet<>();
-    @JsonFormat(pattern="yyyy-MM-dd")
-    @JsonProperty("dateFlight")
     private Date dateFlight;
-    @JsonProperty("cityFrom")
     private String cityFrom;
-    @JsonProperty("cityTo")
     private String cityTo;
 
-    public Flight() {
-    }
-
-
-    public Flight(Plane plane, Set<Passenger> passengers, Date dateFlight, String cityFrom, String cityTo) {
-        this.plane = plane;
-        this.passengers = passengers;
-        this.dateFlight = dateFlight;
-        this.cityFrom = cityFrom;
-        this.cityTo = cityTo;
-    }
-
     @Id
-    @SequenceGenerator(name = "FL_SEQ", sequenceName = "FLIGHT_SEQ", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "FL_SEQ")
-    @Column(name = "ID")
+    @SequenceGenerator(name = "FLIGHT_SEQ", sequenceName = "FLIGHT_ID_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "FLIGHT_SEQ")
+    @Column(name = "FLIGHT_ID")
     public Long getId() {
         return id;
     }
@@ -53,8 +35,8 @@ public class Flight {
         this.id = id;
     }
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "PLANE")
+    @ManyToOne
+    @JoinColumn(name="PLANE_ID", nullable = false)
     public Plane getPlane() {
         return plane;
     }
@@ -63,11 +45,8 @@ public class Flight {
         this.plane = plane;
     }
 
-    //@JsonManagedReference
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(name = "FLIGHT_PASSENGER",
-            joinColumns = {@JoinColumn(name = "FLIGHT_ID")},
-            inverseJoinColumns = {@JoinColumn(name = "PASSENGER_ID")})
+    @ManyToMany(fetch = FetchType.EAGER) //, cascade = CascadeType.ALL
+    @JoinTable(name = "FLIGHT_PASSENGER", joinColumns = @JoinColumn(name = "FLIGHT_ID"), inverseJoinColumns = @JoinColumn(name = "PASSENGER_ID"))
     public Set<Passenger> getPassengers() {
         return passengers;
     }
@@ -104,11 +83,25 @@ public class Flight {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Flight flight = (Flight) o;
+        return Objects.equals(id, flight.id);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id);
+    }
+
+    @Override
     public String toString() {
         return "Flight{" +
                 "id=" + id +
-                ", plane=" + plane +
-                ", dateFlight=" + dateFlight +
+                ", plane=" + plane.toString() +
+                ", dateFlight=" + dateFlight.toString() +
                 ", cityFrom='" + cityFrom + '\'' +
                 ", cityTo='" + cityTo + '\'' +
                 '}';
