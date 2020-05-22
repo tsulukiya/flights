@@ -2,6 +2,7 @@ package com.repository;
 
 import com.model.Plane;
 
+import java.util.List;
 import java.util.Set;
 
 public interface PlaneRepository {
@@ -14,5 +15,7 @@ public interface PlaneRepository {
 
     Plane findById(Long id);
 
-    Set<Plane> regularPlanes(int year);
+    List<Plane> regularPlanes(int year);
+
+    List<Plane> oldPlanes();
 }

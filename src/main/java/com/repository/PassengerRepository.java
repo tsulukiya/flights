@@ -2,7 +2,7 @@ package com.repository;
 
 import com.model.Passenger;
 
-import java.util.Set;
+import java.util.List;
 
 public interface PassengerRepository {
 
@@ -14,5 +14,5 @@ public interface PassengerRepository {
 
     Passenger findById(Long id);
 
-    Set <Passenger> regularPassengers (int year);
+    List<Passenger> regularPassengers (int year);
 }

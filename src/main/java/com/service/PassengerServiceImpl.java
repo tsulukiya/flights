@@ -1,6 +1,5 @@
 package com.service;
 
-import com.model.Flight;
 import com.model.Passenger;
 import com.repository.FlightRepository;
 import com.repository.PassengerRepository;
@@ -8,7 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Set;
+import java.util.List;
+
 @Service
 @Transactional
 public class PassengerServiceImpl implements PassengerService {
@@ -42,7 +42,7 @@ public class PassengerServiceImpl implements PassengerService {
     }
 
     @Override
-    public Set<Passenger> regularPassengers(int year) {
-        return null;
+    public List<Passenger> regularPassengers(int year) {
+        return passengerRepository.regularPassengers(year);
     }
 }

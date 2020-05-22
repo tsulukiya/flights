@@ -5,6 +5,8 @@ import com.service.PassengerService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 public class PassengerController {
     private final PassengerService passengerService;
@@ -32,5 +34,11 @@ public class PassengerController {
     @RequestMapping(method = RequestMethod.GET, value = "findPassenger", produces = "application/json")
     public @ResponseBody Passenger findById(Long id) {
         return passengerService.findById(id);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "findRegularPassenger", produces = "application/json")
+    public @ResponseBody
+    List<Passenger> findById(int year) {
+        return passengerService.regularPassengers(year);
     }
 }

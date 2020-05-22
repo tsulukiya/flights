@@ -12,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
@@ -50,8 +51,11 @@ public class FlightRepositoryImpl implements FlightRepository {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Flight> q = cb.createQuery(Flight.class);
         Root<Flight> root = q.from(Flight.class);
+        Predicate predicate = cb.between(root.get(filter.getFilteredField()), filter.getStartDate(), filter.getEndDate());
+        //Predicate predicate1 = cb.equal(root.get(filter.getFilteredField()), filter.getDate());
+        //if (filter.)
         q.select(root);
-        q.where(cb.between(root.get(filter.getFilteredField()), filter.getStartDate(), filter.getEndDate()));
+        q.where(predicate);
         return entityManager.createQuery(q).getResultList();
     }
 

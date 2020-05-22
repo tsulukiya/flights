@@ -30,7 +30,7 @@ public class Plane {
     @Id
     @SequenceGenerator(name = "PL_SEQ", sequenceName = "PLANE_SEQ", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PL_SEQ")
-    @Column(name = "ID")
+    @Column(name = "PLANE_ID")
     public Long getId() {
         return id;
     }

@@ -2,7 +2,7 @@ package com.service;
 
 import com.model.Plane;
 
-import java.util.Set;
+import java.util.List;
 
 public interface PlaneService {
 
@@ -14,5 +14,7 @@ public interface PlaneService {
 
     Plane findById(Long id);
 
-    Set<Plane> regularPlanes(int year);
+    public List<Plane> oldPlanes();
+
+    List<Plane> regularPlanes(int year);
 }

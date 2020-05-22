@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.List;
+
 @Controller
 public class PlaneController {
     private final PlaneService planeService;
@@ -37,5 +39,17 @@ public class PlaneController {
     @RequestMapping(method = RequestMethod.GET, value = "findPlane", produces = "application/json")
     public @ResponseBody Plane findById(@RequestBody Long id) {
         return planeService.findById(id);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "findOldPlane", produces = "application/json")
+    public @ResponseBody
+    List<Plane> oldPlanes() {
+        return planeService.oldPlanes();
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "findRegularPlane", produces = "application/json")
+    public @ResponseBody
+    List<Plane> regularPlanes(int year) {
+        return planeService.regularPlanes(year);
     }
 }

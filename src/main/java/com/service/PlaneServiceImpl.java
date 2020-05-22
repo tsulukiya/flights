@@ -7,9 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
-import java.sql.SQLData;
-import java.text.SimpleDateFormat;
-import java.util.Set;
+import java.util.List;
 
 @Service
 @Transactional
@@ -43,7 +41,12 @@ public class PlaneServiceImpl implements PlaneService {
     }
 
     @Override
-    public Set<Plane> regularPlanes(int year) {
+    public List<Plane> oldPlanes() {
+        return planeRepository.oldPlanes();
+    }
+
+    @Override
+    public List<Plane> regularPlanes(int year) {
         return planeRepository.regularPlanes(year);
     }
 }

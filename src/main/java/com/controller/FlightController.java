@@ -36,7 +36,7 @@ public class FlightController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "findFlight", produces = "application/json")
-    public @ResponseBody Flight findById(@RequestBody Long id) {
+    public @ResponseBody Flight findById(Long id) {
         return flightService.findById(id);
     }
 

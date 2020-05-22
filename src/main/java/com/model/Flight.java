@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
@@ -36,7 +39,7 @@ public class Flight {
     }
 
     @ManyToOne
-    @JoinColumn(name="PLANE_ID", nullable = false)
+    @JoinColumn(name="PLANE", nullable = false)
     public Plane getPlane() {
         return plane;
     }
@@ -45,8 +48,10 @@ public class Flight {
         this.plane = plane;
     }
 
-    @ManyToMany(fetch = FetchType.EAGER) //, cascade = CascadeType.ALL
-    @JoinTable(name = "FLIGHT_PASSENGER", joinColumns = @JoinColumn(name = "FLIGHT_ID"), inverseJoinColumns = @JoinColumn(name = "PASSENGER_ID"))
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL) //, cascade = CascadeType.ALL
+    @JoinTable(name = "FLIGHT_PASSENGER", joinColumns = @JoinColumn(name = "ID_PASSENGER"),
+            inverseJoinColumns = @JoinColumn(name = "ID_FLIGHT"))
     public Set<Passenger> getPassengers() {
         return passengers;
     }
