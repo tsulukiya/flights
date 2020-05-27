@@ -7,11 +7,9 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -67,11 +65,21 @@ public class PlaneRepositoryImpl implements PlaneRepository {
 
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Long> query = criteriaBuilder.createQuery(Long.class);
-        Root<Flight>root = query.from(Flight.class);
-        Join<Plane, Flight> planeFlightJoin = root.join("plane");
-        planeFlightJoin.on(criteriaBuilder.between(planeFlightJoin.get("dateFlight"), startDate, endDate));
-        query.select(root.get("id"));
+        Root<Flight> root = query.from(Flight.class);
+        Predicate predicate1 = criteriaBuilder.between(root.get("dateFlight"), startDate, endDate);
+        Predicate predicate2 = criteriaBuilder.greaterThanOrEqualTo(criteriaBuilder.count(root), 300L);
+        query.select(root.get("plane").get("id"));
+        query.where(predicate1);
+        query.groupBy(root.get("plane"));
+        query.having(predicate2);
+
+        List<Plane> planeList = new ArrayList<>();
+
         List<Long> longList = entityManager.createQuery(query).getResultList();
-       return null;
+        for (Long aLong : longList) {
+            planeList.add(findById(aLong));
+        }
+
+        return planeList;
     }
 }

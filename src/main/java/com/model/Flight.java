@@ -50,8 +50,8 @@ public class Flight {
 
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL) //, cascade = CascadeType.ALL
-    @JoinTable(name = "FLIGHT_PASSENGER", joinColumns = @JoinColumn(name = "ID_PASSENGER"),
-            inverseJoinColumns = @JoinColumn(name = "ID_FLIGHT"))
+    @JoinTable(name = "FLIGHT_PASSENGER", joinColumns = @JoinColumn(name = "ID_FLIGHT"),
+            inverseJoinColumns = @JoinColumn(name = "ID_PASSENGER"))
     public Set<Passenger> getPassengers() {
         return passengers;
     }

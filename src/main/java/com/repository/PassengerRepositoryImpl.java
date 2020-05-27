@@ -58,15 +58,18 @@ public class PassengerRepositoryImpl implements PassengerRepository {
         CriteriaQuery<Long> query = criteriaBuilder.createQuery(Long.class);
         Root<Passenger> root = query.from(Passenger.class);
         Join<Passenger, Flight> passengerFlightJoin = root.join("flights");
-        passengerFlightJoin.on(criteriaBuilder.between(passengerFlightJoin.
-                get("dateFlight"), startDate, endDate));
         query.select(root.get("id"));
+        query.where(criteriaBuilder.between(passengerFlightJoin.get("dateFlight"), startDate, endDate));
         query.groupBy(root.get("id"));
-//        query.having(criteriaBuilder.greaterThanOrEqualTo(criteriaBuilder.
-//                        count(passengerFlightJoin.get("id")), 25L));
+        query.having(criteriaBuilder.greaterThanOrEqualTo(criteriaBuilder.
+                count(passengerFlightJoin.get("id")), 2L));
         List<Long> longList = entityManager.createQuery(query).getResultList();
+        List<Passenger>passengerList = new ArrayList<>();
 
-        return null;
+        for (Long aLong : longList) {
+            passengerList.add(findById(aLong));
+        }
+        return passengerList;
     }
 }
 

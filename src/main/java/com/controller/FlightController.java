@@ -22,6 +22,7 @@ public class FlightController {
     @RequestMapping(method = RequestMethod.POST, value = "saveFlight", produces = "application/json")
     public @ResponseBody
     Flight save(@RequestBody Flight flight) {
+        flightService.save(flight);
         return flightService.save(flight);
     }
 
