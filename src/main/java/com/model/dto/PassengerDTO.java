@@ -9,6 +9,9 @@ public class PassengerDTO {
     private Date dateOfBirth;
     private String passportCode;
 
+    public PassengerDTO() {
+    }
+
     public PassengerDTO(Long id, String lastName, String nationality, Date dateOfBirth, String passportCode) {
         this.id = id;
         this.lastName = lastName;

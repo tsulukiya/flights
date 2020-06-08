@@ -65,7 +65,7 @@ public class PassengerRepositoryImpl implements PassengerRepository {
                 count(passengerFlightJoin.get("id")), 2L));
         List<Long> longList = entityManager.createQuery(query).getResultList();
         List<Passenger>passengerList = new ArrayList<>();
-
+//
         for (Long aLong : longList) {
             passengerList.add(findById(aLong));
         }

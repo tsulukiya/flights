@@ -1,5 +1,6 @@
 package com.repository;
 
+import com.model.Passenger;
 import com.service.filtering.Filter;
 import com.model.Flight;
 import org.hibernate.annotations.LazyGroup;
@@ -10,10 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -61,7 +60,20 @@ public class FlightRepositoryImpl implements FlightRepository {
 
     @Override
     public List<Flight> mostPopularTo() {
-        return null;
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Flight> query = criteriaBuilder.createQuery(Flight.class);
+        Root<Flight> root = query.from(Flight.class);
+        query.select(root);
+        query.orderBy(criteriaBuilder.desc(root.get("cityTo")));
+        //query.groupBy(criteriaBuilder.count(root.get("id")));
+
+        List<Flight>flightList = entityManager.createQuery(query).getResultList();
+        System.out.println(flightList.size());
+
+        for (Flight flight : flightList) {
+            System.out.println(flight.toString());
+        }
+        return flightList;
     }
 
     @Override
