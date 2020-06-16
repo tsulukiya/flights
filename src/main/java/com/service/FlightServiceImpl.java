@@ -66,7 +66,7 @@ public class FlightServiceImpl implements FlightService {
 
     @Override
     public List<Flight> mostPopularFrom() {
-        return null;
+        return flightRepository.mostPopularFrom();
     }
 
     @Transactional

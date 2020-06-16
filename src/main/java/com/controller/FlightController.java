@@ -47,9 +47,15 @@ public class FlightController {
         return flightService.flightsByDate(filter);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "filteringMostPopFlight", produces = "application/json")
+    @RequestMapping(method = RequestMethod.GET, value = "filteringMostPopFlightTo", produces = "application/json")
     public @ResponseBody
     List<Flight> mostPopularTo() {
         return flightService.mostPopularTo();
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "filteringMostPopFlightFrom", produces = "application/json")
+    public @ResponseBody
+    List<Flight> mostPopularFrom() {
+        return flightService.mostPopularFrom();
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,25 @@ import java.util.List;
 public class FlightRepositoryImpl implements FlightRepository {
     @PersistenceContext
     private EntityManager entityManager;
+    private static final String SQL_MOST_POPULAR_TO =
+            "SELECT FLIGHT.*\n" +
+                    "FROM FLIGHT\n" +
+                    "LEFT JOIN (\n" +
+                    "    SELECT CITY_TO, COUNT(FLIGHT_ID) rnk\n" +
+                    "    FROM FLIGHT\n" +
+                    "    GROUP BY CITY_TO\n" +
+                    ") city_rnk ON FLIGHT.CITY_TO = city_rnk.CITY_TO\n" +
+                    "ORDER BY city_rnk.rnk DESC";
+
+    private static final String SQL_MOST_POPULAR_FROM =
+            "SELECT FLIGHT.*\n" +
+                    "FROM FLIGHT\n" +
+                    "LEFT JOIN (\n" +
+                    "    SELECT CITY_FROM, COUNT(FLIGHT_ID) rnk\n" +
+                    "    FROM FLIGHT\n" +
+                    "    GROUP BY CITY_FROM\n" +
+                    ") city_rnk ON FLIGHT.CITY_FROM = city_rnk.CITY_FROM\n" +
+                    "ORDER BY city_rnk.rnk DESC";
 
 
     @Override
@@ -52,7 +72,6 @@ public class FlightRepositoryImpl implements FlightRepository {
         Root<Flight> root = q.from(Flight.class);
         Predicate predicate = cb.between(root.get(filter.getFilteredField()), filter.getStartDate(), filter.getEndDate());
         //Predicate predicate1 = cb.equal(root.get(filter.getFilteredField()), filter.getDate());
-        //if (filter.)
         q.select(root);
         q.where(predicate);
         return entityManager.createQuery(q).getResultList();
@@ -60,24 +79,15 @@ public class FlightRepositoryImpl implements FlightRepository {
 
     @Override
     public List<Flight> mostPopularTo() {
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Flight> query = criteriaBuilder.createQuery(Flight.class);
-        Root<Flight> root = query.from(Flight.class);
-        query.select(root);
-        query.orderBy(criteriaBuilder.desc(root.get("cityTo")));
-        //query.groupBy(criteriaBuilder.count(root.get("id")));
-
-        List<Flight>flightList = entityManager.createQuery(query).getResultList();
-        System.out.println(flightList.size());
-
-        for (Flight flight : flightList) {
-            System.out.println(flight.toString());
-        }
-        return flightList;
+        Query query = entityManager.createQuery(SQL_MOST_POPULAR_TO);
+        List<Flight> flights = query.getResultList();
+        return flights;
     }
 
     @Override
     public List<Flight> mostPopularFrom() {
-        return null;
+        Query query = entityManager.createQuery(SQL_MOST_POPULAR_FROM);
+        List<Flight> flights = query.getResultList();
+        return flights;
     }
 }
